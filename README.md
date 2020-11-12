@@ -21,13 +21,13 @@ In recent decades both anomalously warm and cold seawater temperatures have resu
 Whilst corals' response to elevated temperature has justifiably attracted substantial research interest, coral 
 physiology under cold water stress is relatively unfamiliar. The response to below winter ambient water temperature 
 was tested for two common reef building species from the Gulf of Aqaba in an ex situ experiment. Stylophora pistillata 
-and Acropora eurystoma were exposed to 2 or 4°C below ambient and a suite of physiological parameters were assessed. 
-At 4°C below ambient (ca. 18.6°C), both species had significant declines in photosynthetic indices (maximum quantum yield, 
+and Acropora eurystoma were exposed to 1 or 3°C below ambient and a suite of physiological parameters were assessed. 
+At 3°C below ambient (ca. 18.6°C), both species had significant declines in photosynthetic indices (maximum quantum yield, 
 electron transport rate, saturation irradiance, and photochemical efficiency) and chlorophyll concentration compared 
 to corals at ambient winter temperatures. It was previously unknown that corals at this site live close to their 
 cold-water bleaching threshold and may be vulnerable as climate variability increases in magnitude. In order to determine
-if the cold winter reduces the known heat resistance of this population, the corals were subsequently exposed to a heat 
-stress of 3°C above typical summer temperatures. Exposed to heat stress, both species showed fewer physiological deviations
-compared to the cold-water stress. The cold winter experience did not increase corals' susceptibility to heat stress. 
+if the cold winter reduces the known heat resistance of this population, the corals were subsequently exposed to an acute heat 
+shock of 3°C above typical summer temperatures. Exposed to above ambient temperatures, both species showed fewer physiological deviations
+compared to the cold-water stress. The cold winter experience did not increase corals' susceptibility to warming. 
 This study provides further support for the selection of heat tolerant genotypes colonising the Red Sea basin and thereby 
 also supporting the mechanism behind the Reef Refuge Hypothesis.
