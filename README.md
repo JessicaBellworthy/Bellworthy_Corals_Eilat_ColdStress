@@ -1,6 +1,12 @@
 # Eilat_ColdStress_Corals
-Raw Physiology Data
-Warming resistant corals from the Gulf of Aqaba live close to their cold-water bleaching threshold
+Complete Raw Physiology Data file: "complete_rawdata_coldstress_Bellworthy.xlsx"
+
+Raw data for use with R markdown files: "acropora_rawdata_clean.csv" and "stylo_rawdata_clean.csv"
+R code template for data visualisation, parametric assumption testing, and statistical tests: "Coldstress_DataVis&StatsClean_Bellworthy.Rmd"
+R code for creation of graphics: "graphics_coldstess_acro.Rmd" and "graphics_coldstress_stylo.Rmd"
+
+
+Article title: Warming resistant corals from the Gulf of Aqaba live close to their cold-water bleaching threshold
 
 Jessica Bellworthy1, 2*, Maoz Fine1, 2
 1.	The Goodman Faculty of Life Sciences, Bar Ilan University, Ramat Gan, 5290002, Israel
