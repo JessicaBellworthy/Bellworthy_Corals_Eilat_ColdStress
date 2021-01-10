@@ -1,0 +1,49 @@
+
+Article Title: Warming resistant corals from the Gulf of Aqaba live close to their cold-water bleaching threshold
+Article Authors: Jessica Bellworthy, Maoz Fine
+
+Code written by Jessica Bellworthy
+
+
+Load libraries, data, and view
+```{r}
+library(ggplot2)
+library(ggsci)
+library(cowplot)
+library(plyr)
+library(car)
+
+setwd("~/Desktop/R/ColdStress")
+data = read_csv("fvfm_temp_published.csv")
+
+View(data)
+head(data)
+```
+
+
+```{r}
+# remove unpublished data from the data frame
+pub_data = subset(data, !published == "n")
+View(pub_data)
+
+pub = ggplot(data = pub_data, aes(x = temp, y =fvfm, colour = experiment))+
+  geom_point(na.rm = TRUE, alpha = 0.5)+
+    labs(x = "Temperature (°C)", y = expression(~F[V]/F[M]))+
+  theme_classic()+
+    scale_y_continuous(limits = c(0.2, 0.7), breaks = seq(0.2,0.7,0.1))+
+  scale_x_continuous(limits = c(18, 34.5), breaks = seq(18,36,2))+
+ scale_colour_viridis_d()+
+  geom_vline(xintercept = 21.41, linetype ="dotted", color = "black", size=0.5)+
+  geom_vline(xintercept = 26.75, linetype ="dotted", color = "black", size=0.5)+
+ stat_smooth(aes(group = 1), colour = "black", level = 0.99)+
+  theme(axis.text.x =element_text(size = 10, colour = "black"), axis.text.y =element_text(size = 10, colour = "black"), axis.title.y = element_text(size = 12, colour = "black"), axis.title.x = element_text(size = 12, colour = "black"), legend.title = element_blank(), legend.text = element_text(size = 8))+
+   annotate("text", x = c(32,22.5,28), y = c(0.23,0.68, 0.68), label = c("n = 149", "Tmin", "Tmax"), size = 3)+
+  #   scale_colour_viridis_d(labels = c("Bellworthy and Fine (in review)", "Bellworthy and Fine 2017", "Fine et al. 2013", "Kreuger et al. 2018"))+
+  guides(colour = FALSE)
+
+pub
+
+ggsave2(filename = "Figure4_Temp_FvFm.pdf", pub, width = 10, height = 8, units = "cm", dpi = 600)
+```
+
+
