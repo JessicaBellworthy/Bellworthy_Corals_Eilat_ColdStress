@@ -1,0 +1,218 @@
+Article Title: Warming resistant corals from the Gulf of Aqaba live close to their cold-water bleaching threshold
+Article Authors: Jessica Bellworthy, Maoz Fine
+
+Code written by Jessica Bellworthy
+
+
+Load libraries, data, and view
+```{r}
+# load packages
+library(ggplot2)
+library(ggsci)
+library(cowplot)
+
+rd_s <- read.csv("stylo_rawdata_clean.csv")
+View(rd_s)
+str(rd_s)
+colnames(rd_s)
+
+# x axis label names
+mynames <- c("WINTER", "SUMMER")
+```
+
+
+####### Algal parameters #########
+```{r}
+# cellscm plot
+p_cellcm <- ggplot(rd_s, aes(day, cellcm, fill = treatment))+
+ geom_boxplot(outlier.shape = "", fatten = 0.5, alpha = 0.7, lwd = 0.2)+
+ geom_point(position = position_dodge(width = 0.75), aes(group=treatment, shape=geno), size = 0.75)+
+  scale_x_discrete(labels = mynames)+
+  theme_classic()+
+  theme(axis.text.x =element_text(size = 8, colour = "black"), axis.text.y =element_text(size = 8, colour = "black"), axis.title.y = element_text(size = 8, colour = "black"),legend.position = c(0.9, 0.9), legend.title = element_blank(), legend.key.size = unit(6, "mm"))+
+  scale_fill_simpsons()+
+  scale_y_continuous(limits = c(-0.8, 8), breaks = seq(0,8,2))+
+  labs(x="", y=expression(cells ~'×'~10^{5} ~cm^{-2}))+
+  guides(shape = FALSE, fill = FALSE)+
+  annotate("text", x = c(0.75, 1, 1.25), y = c(-0.6,-0.6,-0.6), label = c("a", "b", "b"), size = 2)
+  
+p_cellcm
+```
+
+
+```{r}
+# remove one outlier from t2m6, row 18
+pcm_rd_s =  rd_s[-c(18), ]
+
+# photosynthesis cm plot
+p_pscm <- ggplot(pcm_rd_s, aes(day, pscm, fill = treatment))+
+ geom_boxplot(outlier.shape = "", fatten = 0.5, alpha = 0.7, lwd = 0.2)+
+ geom_point(position = position_dodge(width = 0.75), aes(group=treatment, shape=geno), size = 0.75)+
+ scale_x_discrete(labels = mynames)+
+  theme_classic()+
+  theme(axis.text.x = element_text(size = 8, colour = "black"), axis.text.y = element_text(size = 8, colour = "black"), axis.title.y = element_text(size = 8, colour = "black"),legend.position = c(0.85, 0.8), legend.title = element_blank(), legend.key.size = unit(6, "mm"))+
+  scale_fill_simpsons()+
+  scale_y_continuous(limits = c(-0.05, 0.15), breaks = seq(-0.05,0.15, 0.05))+
+  labs(x="", y=expression(~µmol ~O[2] ~h^{-1} ~cm^{-2}))+
+  guides(shape = FALSE, fill = FALSE)+
+  annotate("text", x = c(0.75, 1, 1.25), y = c(-0.04,-0.04,-0.04), label = c("a", "b", "b"), size = 2)
+
+p_pscm
+```
+
+
+```{r}
+# remove one outlier from t2m6, row 6
+chl_rd_s =  rd_s[-c(6), ]
+
+# chlcm plot
+p_chlcm <- ggplot(chl_rd_s, aes(day,chlcm, fill = treatment))+
+geom_boxplot(outlier.shape = "", fatten = 0.5, alpha = 0.7, lwd = 0.2)+
+  geom_point(position = position_dodge(width = 0.75), aes(group=treatment, shape=geno), size = 0.75)+
+  scale_x_discrete(labels = mynames)+
+ theme_classic()+
+  theme(axis.text.x =element_text(size = 8, colour = "black"), axis.text.y =element_text(size = 8, colour = "black"), axis.title.y = element_text(size = 8, colour = "black"),legend.position = c(0.85, 0.8), legend.title = element_blank(), legend.key.size = unit(6, "mm"))+
+ scale_fill_simpsons()+
+  scale_y_continuous(limits = c(-5, 55), breaks = seq(0,60,10))+
+ labs(x="", y=expression(~µg ~chl ~cm^{-2}))+
+   guides(shape = FALSE, fill = FALSE)+
+  annotate("text", x = c(0.75, 1, 1.25), y = c(-2, -2, -2), label = c("a", "a", "b"), size = 2)
+
+p_chlcm
+```
+
+
+####### Coral parameters #########
+```{r}
+# rcm plot
+p_rcm <- ggplot(rd_s, aes(day, rcm, fill = treatment))+
+geom_boxplot(outlier.shape = "", fatten = 0.5, alpha = 0.7, lwd = 0.2)+
+  geom_point(position = position_dodge(width = 0.75), aes(group=treatment, shape=geno), size = 0.75)+
+  scale_x_discrete(labels = mynames)+
+  theme_classic()+
+  theme(axis.text.x =element_text(size = 8, colour = "black"), axis.text.y =element_text(size = 8, colour = "black"), axis.title.y = element_text(size = 8, colour = "black"),legend.position = c(0.85, 0.9), legend.title = element_blank(), legend.key.size = unit(6, "mm"))+
+  scale_fill_simpsons()+
+  scale_y_continuous(limits = c(0, 0.2), breaks = seq(0, 0.2, 0.05))+
+  labs(x="", y=expression(~µmol ~O[2] ~h^{-1} ~cm^{-2}))+
+  guides(shape = FALSE, fill = FALSE)
+
+p_rcm
+```
+
+
+```{r}
+# remove two minus values from t2m3, row 7 and 8
+tp_rd_s =  rd_s[-c(7,8), ]
+
+# tpcm plot
+p_tpcm <- ggplot(tp_rd_s, aes(day, tpcm, fill = treatment))+
+geom_boxplot(outlier.shape = "", fatten = 0.5, alpha = 0.7, lwd = 0.2)+
+ geom_point(position = position_dodge(width = 0.75), aes(group=treatment, shape=geno), size = 0.75)+
+  scale_x_discrete(labels = mynames)+
+  theme_classic()+
+  theme(axis.text.x =element_text(size = 8, colour = "black"), axis.text.y =element_text(size = 8, colour = "black"), axis.title.y = element_text(size = 8, colour = "black"),legend.position = c(0.85, 0.8), legend.title = element_blank(), legend.key.size = unit(6, "mm"))+
+  scale_fill_simpsons()+
+  scale_y_continuous(limits = c(0, 1.4), breaks = seq(0,1.4,0.2))+
+  labs(x="", y=expression(~mg ~protein^{-1} ~cm^{-2}))+
+  guides(shape = FALSE,  fill = FALSE)
+
+p_tpcm
+```
+
+
+####### Photochemistry parameters #########
+```{r}
+# fvfm plot
+p_fvfm <- ggplot(rd_s, aes(day, fvfm, fill = treatment))+
+geom_boxplot(outlier.shape = "", fatten = 0.5, alpha = 0.7, lwd = 0.2)+
+geom_point(position = position_dodge(width = 0.75), aes(group=treatment, shape=geno), size = 0.75)+
+  scale_x_discrete(labels = mynames)+
+ theme_classic()+
+  theme(axis.text.x =element_text(size = 8, colour = "black"), axis.text.y =element_text(size = 8, colour = "black"), axis.title.y = element_text(size = 8, colour = "black"),legend.position = c(0.85, 0.9), legend.title = element_blank(), legend.key.size = unit(6, "mm"))+
+ scale_fill_simpsons()+
+  scale_y_continuous(limits = c(0.2, 0.61), breaks = seq(0.2,0.6,0.2))+
+ labs(x="", y=expression(~F[V]/F[M]))+
+   guides(shape = FALSE, fill = FALSE)+
+  annotate("text", x = c(0.75, 1, 1.25), y = c(0.22,0.22, 0.22), label = c("a", "ab", "b"), size = 2)
+
+p_fvfm
+```
+
+ 
+```{r}
+# etr plot
+p_etr <- ggplot(rd_s, aes(day, etr, fill = treatment))+
+geom_boxplot(outlier.shape = "", fatten = 0.5, alpha = 0.7, lwd = 0.2)+
+geom_point(position = position_dodge(width = 0.75), aes(group=treatment, shape=geno), size = 0.75)+
+  scale_x_discrete(labels = mynames)+
+ theme_classic()+
+  theme(axis.text.x =element_text(size = 8, colour = "black"), axis.text.y =element_text(size = 8, colour = "black"), axis.title.y = element_text(size = 8, colour = "black"), legend.position = c(0.85, 0.9), legend.title = element_blank(), legend.key.size = unit(6, "mm"))+
+ scale_fill_simpsons()+
+  scale_y_continuous(limits = c(-5, 80), breaks = seq(0,80,20))+
+ labs(x="", y=expression(~rETR[max]))+
+   guides(shape = FALSE, fill = FALSE)+
+  annotate("text", x = c(0.75, 1, 1.25), y = c(-3,-3,-3), label = c("a", "b", "c"), size = 2)
+
+p_etr
+```
+
+
+```{r}
+# ik plot
+p_ik <- ggplot(rd_s, aes(day, ik, fill = treatment))+
+geom_boxplot(outlier.shape = "", fatten = 0.5, alpha = 0.7, lwd = 0.2)+
+  geom_point(position = position_dodge(width = 0.75), aes(group=treatment, shape=geno),  size = 0.75)+
+  scale_x_discrete(labels = mynames)+
+ theme_classic()+
+  theme(axis.text.x =element_text(size = 8, colour = "black"), axis.text.y =element_text(size = 8, colour = "black"), axis.title.y = element_text(size = 8, colour = "black"), legend.position = c(0.85, 0.9), legend.title = element_blank(), legend.key.size = unit(6, "mm"))+
+ scale_fill_simpsons()+
+   scale_y_continuous(limits = c(-10, 190), breaks = seq(0,190,30))+
+ labs(x="", y=expression(~I[K]))+
+   guides(shape = FALSE, fill = FALSE)+
+  annotate("text", x = c(0.75, 1, 1.25, 1.75, 2, 2.25), y = c(-5,-5,-5,-5,-5,-5), label = c("a", "b", "c", "a", "b", "ab"), size = 2)
+
+p_ik
+```
+
+
+```{r}
+# alpha plot
+p_alpha <- ggplot(rd_s, aes(day, alpha, fill = treatment))+
+geom_boxplot(outlier.shape = "", fatten = 0.5, alpha = 0.7, lwd = 0.2)+
+geom_point(position = position_dodge(width = 0.75), aes(group=treatment, shape=geno), size = 0.75)+
+  scale_x_discrete(labels = mynames)+
+ theme_classic()+
+  theme(axis.text.x =element_text(size = 8, colour = "black"), axis.text.y =element_text(size = 8, colour = "black"), axis.title.y = element_text(size = 8, colour = "black"), legend.position = c(0.85, 0.9), legend.title = element_blank(), legend.key.size = unit(6, "mm"))+
+ scale_fill_simpsons()+
+  scale_y_continuous(limits = c(0.25, 0.92), breaks = seq(0.3,0.9,0.2))+
+ labs(x="", y=expression(alpha))+
+   guides(shape = FALSE,  fill = FALSE)+
+  annotate("text", x = c(0.75, 1, 1.25, 1.75, 2, 2.25), y = c(0.27,0.27,0.27,0.27,0.27,0.27),label = c("a", "ab", "b", "a", "b", "b"), size = 2)
+
+p_alpha
+```
+
+
+####### Combine the plots to grids for Figures #########
+```{r}
+#photochemistry
+plot1 = plot_grid(p_fvfm, a_fvfm, p_etr, a_etr, p_alpha, a_alpha, p_ik, a_ik, labels = c("A", "E", "B", "F", "C", "G", "D", "H"), label_size = 12, ncol = 2, align = "v")
+
+ggsave2(filename = "figure_photosynthesis.pdf", plot1, width = 10, height = 18, units = "cm", dpi = 600)
+ggsave2(filename = "figure_photosynthesis.jpeg", plot1, width = 10, height = 18, units = "cm", dpi = 600)
+
+
+#resp and protein
+plot2 = plot_grid(p_tpcm, a_tpcm, p_rcm, a_rcm, labels = c("A", "C", "B", "D"), label_size = 12, ncol = 2, align = "v")
+
+ggsave2(filename = "figure_host.pdf", plot2, width = 10, height = 9, units = "cm", dpi = 600)
+ggsave2(filename = "figure_host.jpeg", plot2, width = 10, height = 9, units = "cm", dpi = 600)
+
+
+#cell density, chlorophyll, photosynthesis
+plot3 = plot_grid(p_cellcm, a_cellcm, p_chlcm, a_chlcm, p_pscm, a_pscm, labels = c("A", "D", "B", "E", "C", "F"), label_size = 12, ncol = 2, align = "v")
+
+ggsave2(filename = "figure_cell.pdf", plot3, width = 10, height = 13, units = "cm", dpi = 600)
+ggsave2(filename = "figure_cell.jpeg", plot3, width = 10, height = 13, units = "cm", dpi = 600)
+```
+
