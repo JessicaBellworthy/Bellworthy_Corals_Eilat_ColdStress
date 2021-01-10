@@ -1,0 +1,139 @@
+Article Title: Warming resistant corals from the Gulf of Aqaba live close to their cold-water bleaching threshold
+Article Authors: Jessica Bellworthy, Maoz Fine
+
+Code written by Jessica Bellworthy
+
+
+Load libraries, data, and view
+```{r}
+library(readr)
+library(ggplot2)
+library(car)
+library(lme4)
+library(predictmeans)
+library(emmeans)
+ 
+#Load data
+data <- read.csv("acropora_rawdata_clean.csv")
+View(data)
+str(data)
+colnames(data)
+```
+
+
+####### Data Visualization and Parametric Assumption testing #######
+
+Variable: Chlorophyll concentration per surface area (chl_cm)
+# 1. Plot variable against each fixed factor (temperature and day) to assess data for outliers and visualise homogenous variance 
+
+```{r}
+#plot
+chl_cm = ggplot(data = data, aes(y = chlcm))+
+  geom_boxplot()+
+  geom_point(aes(x = 0, color = geno), size = 2.5)+
+   facet_grid(day ~ treatment)+
+  theme_bw()+
+   theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+chl_cm
+```
+
+
+# 2. Levenes Test: test the assumption of homogenous variance
+
+```{r}
+#check homoscadecity
+plot(data$chlcm)  
+
+#Null hypothesis for Levenes: There is no significant difference in the variance between groups 
+# i.e. if p = <0.05 there is significant differences in the variation and therefore violates the assumption of ANOVA
+#homogeneous variances: p = >0.05
+    
+leveneTest(chlcm ~ day, data) 
+leveneTest(chlcm ~ treatment, data)  
+leveneTest(chlcm ~ geno, data)  
+```
+
+
+Check for normally distributed data within groups for the fixed factors day and treatment
+# 3. Shapiro.test on raw data groups
+
+```{r}
+## Null hyp: the distribution of the data is not significantly different from a normal distribution i.e. p = > 0.05 the data are normal
+
+# Day T2 - Winter phase
+T2amb = subset(data, day =="T2" & data$treatment=='Amb')
+View(T2amb)
+hist(T2amb$chlcm)
+qqnorm(T2amb$chlcm)
+shapiro.test(T2amb$chlcm)
+
+T2m3=subset(data, day=='T2' & treatment=='Min 3')
+shapiro.test(T2m3$chlcm)
+
+T2m6=subset(data, day=='T2' &treatment=='Min 6')
+shapiro.test(T2m6$chlcm)
+
+
+## Day T4 - Summer phase
+T4amb=subset(data, day=='T4' & treatment=='Amb')
+shapiro.test(T4amb$chlcm)
+
+T4m3=subset(data, day=='T4' & treatment=='Min 3')
+shapiro.test(T4m3$chlcm)
+
+T4m6=subset(data, day=='T4' & treatment=='Min 6')
+shapiro.test(T4m6$chlcm)
+```
+
+
+####### Parametric Statistical Analysis #######
+
+4. Linear Mixed Effects Models. Perform for each dependent variable, with the fixed factor treatment and random factor genotype
+lmerTest (gaussian distribution) and print anova(model). Check parametric assumptions on residuals
+
+```{r}
+# T2 Winter phase
+T2data=subset(data, day=='T2')
+View(T2data)
+chlcm_lmer = lmer(chlcm ~ treatment + (1|geno), data = T2data, REML=FALSE)
+summary(chlcm_lmer)
+anova(chlcm_lmer)
+
+residplot(chlcm_lmer, group = "treatment")
+
+
+# T4 Summer phase
+T4data=subset(data, day=='T4')
+View(T4data)
+chlcm_lmer_T4 = lmer(chlcm ~ treatment + (1|geno), data = T4data, REML=FALSE)
+summary(chlcm_lmer_T4)
+anova(chlcm_lmer_T4)
+
+residplot(chlcm_lmer_T4, group = "treatment")
+```
+
+
+6. Post Hoc testing:
+Multiple comparisons between treatments within each time point
+
+```{r}
+#“pairwise P-value plot” displaying all the P values in pairwise comparisons. Each comparison is associated with a vertical line segment that joins the scale positions of the two EMMs being compared, and whose horizontal position is determined by the P value of that comparison.
+
+# T2 Winter phase
+ph_chlcm_T2 <- emmeans(chlcm_lmer, ~ treatment)
+summary(ph_chlcm_T2, infer = TRUE)
+pwpm(ph_chlcm_T2)
+plot(ph_chlcm_T2, comparisons = TRUE)
+
+
+# T4 Summer phase
+ph_chlcm_T4 <- emmeans(chlcm_lmer_T4, ~ treatment)
+summary(ph_chlcm_T4, infer = TRUE)
+pwpm(ph_chlcm_T4)
+plot(ph_chlcm_T4, comparisons = TRUE)
+```
+
+This code completes the data visualization and statistical testing for the single dependent variable chlorophyll density (chlcm). Repeat the above script for each of the dependent variables to be examined.
